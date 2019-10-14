@@ -1,16 +1,13 @@
 package products;
 
 class GrossPrice {
+
+    private int vat;
+    private double vatAmount;
+
     private double netToGross(Product product) {
-        return (product.getNetPrice() + getVatAmount(product));
-    }
+        String categoryName = product.getCategory().getName();
 
-    private double getVatAmount(Product product){
-        return (product.getNetPrice() * getVat(product.getCategory().getName()) / 100);
-    }
-
-    private int getVat(String categoryName) {
-        int vat;
         switch (categoryName) {
             case "Samochody":
                 vat = 23;
@@ -24,10 +21,15 @@ class GrossPrice {
             default:
                 vat = 23;
         }
-        return vat;
+
+        vatAmount = product.getNetPrice() * vat / 100;
+        double grossAmount = product.getNetPrice() + vatAmount;
+
+        return grossAmount;
     }
 
-    String getGrossPriceInfo(Product product){
-        return("Stawka vat: " + getVat(product.getCategory().getName()) + "%, Wartość VAT: " + getVatAmount(product) + ", Cena brutto: " + netToGross(product));
+    String getGrossPriceInfo(Product product) {
+        double grossAmount = netToGross(product);
+        return ("Stawka vat: " + vat + "%, Wartość VAT: " + vatAmount + ", Cena brutto: " + grossAmount);
     }
 }
