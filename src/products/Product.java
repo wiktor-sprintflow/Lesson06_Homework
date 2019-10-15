@@ -5,12 +5,27 @@ class Product {
     private String description;
     private double netPrice;
     private Category category;
+    private int vat;
 
     Product(String name, String description, double netPrice, Category category) {
         this.name = name;
         this.description = description;
         this.netPrice = netPrice;
         this.category = category;
+
+        switch (this.category.getName()) {
+            case "Samochody":
+                vat = 23;
+                break;
+            case "Gazety":
+                vat = 8;
+                break;
+            case "Produkty dla niemowląt":
+                vat = 5;
+                break;
+            default:
+                vat = 23;
+        }
     }
 
     Product() {
@@ -48,7 +63,17 @@ class Product {
         this.category = category;
     }
 
+    public int getVat() {
+        return vat;
+    }
+
     String getProductInfo() {
-        return ("Nazwa: " + name + ", Opis: " + description + ", Kategoria: " + category.getName() + ", Cena netto: " + netPrice);
+        GrossPrice grossPrice = new GrossPrice();
+
+        double priceWithVat = grossPrice.netToGross(this);
+        double vatAmount = priceWithVat - netPrice;
+
+        return ("Nazwa: " + name + ", Opis: " + description + ", Kategoria: " + category.getName() + ", Cena netto: " + netPrice +
+                ", Stawka VAT: " + vat + ", Wartość VAT: " + vatAmount + ", Kwota brutto: " + priceWithVat);
     }
 }
